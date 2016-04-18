@@ -33,6 +33,8 @@ import com.crashlytics.android.answers.Answers;
 
 import java.util.HashSet;
 
+import at.amartinz.universaldebug.UniversalDebug;
+import at.amartinz.universaldebug.UniversalDebugExtension;
 import at.amartinz.universaldebug.analytics.Analytics;
 import at.amartinz.universaldebug.fabric.trees.AnswerComponent;
 import io.fabric.sdk.android.Fabric;
@@ -41,14 +43,14 @@ import io.fabric.sdk.android.Kit;
 /**
  * Created by amartinz on 18.04.16.
  */
-public class FabricConfig {
+public class FabricConfig extends UniversalDebugExtension {
     private final Context applicationContext;
 
     public final HashSet<Kit> kitHashSet;
 
     @RequiresPermission(Manifest.permission.INTERNET)
-    public FabricConfig(Context applicationContext) {
-        this.applicationContext = applicationContext;
+    public FabricConfig(UniversalDebug universalDebug) {
+        this.applicationContext = universalDebug.getApplicationContext();
         this.kitHashSet = new HashSet<>();
     }
 
@@ -67,7 +69,7 @@ public class FabricConfig {
         return kitHashSet.toArray(new Kit[kitHashSet.size()]);
     }
 
-    public Fabric install() {
-        return Fabric.with(applicationContext, getKits());
+    public void install() {
+        Fabric.with(applicationContext, getKits());
     }
 }

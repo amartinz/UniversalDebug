@@ -30,12 +30,12 @@ import android.util.Log;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import at.amartinz.universaldebug.UniversalDebug;
 import at.amartinz.universaldebug.fabric.FabricConfig;
 import at.amartinz.universaldebug.fabric.trees.CrashlyticsComponent;
 import at.amartinz.universaldebug.trees.BaseTree;
 import at.amartinz.universaldebug.trees.LogComponent;
 import at.amartinz.universaldebug.trees.VibrationComponent;
-import timber.log.Timber;
 
 /**
  * Created by amartinz on 18.04.16.
@@ -44,15 +44,32 @@ public class App extends Application {
     @Override public void onCreate() {
         super.onCreate();
 
-        // TODO: integrate into debug core
-        new FabricConfig(this)
-                .withAnswers()
-                .withCrashlytics()
-                .install();
+        final UniversalDebug universalDebug = new UniversalDebug(this)
+                .withDebug(BuildConfig.DEBUG)
+                .withTimber(true)
+                .withDebugTree(buildDebugTree())
+                .withProductionTree(buildProductionTree());
 
+        final FabricConfig fabricConfig = new FabricConfig(universalDebug)
+                .withAnswers()
+                .withCrashlytics();
+        universalDebug.withExtension(fabricConfig);
+
+        universalDebug.install();
+    }
+
+    private BaseTree buildDebugTree() {
+        return buildTree(true);
+    }
+
+    private BaseTree buildProductionTree() {
+        return buildTree(false);
+    }
+
+    private BaseTree buildTree(boolean isDebug) {
         final HashSet<Integer> priorityFilter = new HashSet<>();
         // if we are in release mode, remove all log calls except ERROR and WARN
-        if (!BuildConfig.DEBUG) {
+        if (!isDebug) {
             priorityFilter.addAll(Arrays.asList(Log.ASSERT, Log.DEBUG, Log.INFO, Log.VERBOSE));
         }
         final BaseTree baseTree = new BaseTree(this, priorityFilter);
@@ -60,18 +77,18 @@ public class App extends Application {
         final LogComponent logComponent = new LogComponent(baseTree);
         baseTree.addComponent(logComponent);
 
-        final VibrationComponent vibrationComponent = new VibrationComponent(baseTree);
-        // only vibrate on error logs
-        final HashSet<Integer> vibrationFilter = new HashSet<>(
-                Arrays.asList(Log.ASSERT, Log.DEBUG, Log.INFO, Log.VERBOSE, Log.WARN));
-        vibrationComponent.setPriorityFilterSet(vibrationFilter);
-        baseTree.addComponent(vibrationComponent);
+        if (isDebug) {
+            final VibrationComponent vibrationComponent = new VibrationComponent(baseTree);
+            // only vibrate on error logs
+            final HashSet<Integer> vibrationFilter = new HashSet<>(
+                    Arrays.asList(Log.ASSERT, Log.DEBUG, Log.INFO, Log.VERBOSE, Log.WARN));
+            vibrationComponent.setPriorityFilterSet(vibrationFilter);
+            baseTree.addComponent(vibrationComponent);
+        }
 
         final CrashlyticsComponent crashlyticsComponent = new CrashlyticsComponent(baseTree);
         baseTree.addComponent(crashlyticsComponent);
 
-        // plant a tree, to make mother earth happy
-        Timber.plant(baseTree);
-        Timber.v("We just planted the base tree!");
+        return baseTree;
     }
 }
