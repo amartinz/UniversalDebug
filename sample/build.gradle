@@ -1,0 +1,50 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
+
+    signingConfigs {
+        release {
+            if (project.hasProperty("signing_prop_file")) {
+                logger.quiet('Signing the build!')
+                def Properties keyProps = new Properties()
+                keyProps.load(new FileInputStream(file(signing_prop_file)))
+                storeFile file(keyProps["store"])
+                storePassword keyProps["storePass"]
+                keyAlias keyProps["alias"]
+                keyPassword keyProps["pass"]
+            } else {
+                logger.quiet('Not signing the build!')
+                storeFile file("debug.keystore")
+            }
+        }
+    }
+
+    defaultConfig {
+        applicationId "at.amartinz.universaldebug.sample"
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 1
+        versionName '1.0.0'
+
+        def String gitRevision = getGitCommitHash()
+        if (gitRevision != null) {
+            versionName(versionName + '-git-' + gitRevision)
+        }
+
+        signingConfig signingConfigs.release
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile 'com.android.support:appcompat-v7:23.3.0'
+
+    compile project(':UniversalDebug-core')
+}
