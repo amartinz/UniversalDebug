@@ -1,11 +1,30 @@
 package at.amartinz.universaldebug.sample;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 
+import timber.log.Timber;
+
 public class MainActivity extends AppCompatActivity {
+    private static final Handler HANDLER = new Handler(Looper.getMainLooper());
+
     @Override protected void onCreate(Bundle savedInstanceState) {
+        Timber.d("OnCreate got called!");
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
+
+    @Override protected void onResume() {
+        super.onResume();
+        HANDLER.postDelayed(errorLogRunnable, 2500);
+    }
+
+    private static final Runnable errorLogRunnable = new Runnable() {
+        @Override public void run() {
+            Timber.e("Any error occurred, i guess...");
+        }
+    };
 }
