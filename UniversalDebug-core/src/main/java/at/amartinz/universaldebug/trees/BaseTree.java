@@ -135,7 +135,7 @@ public class BaseTree extends Timber.DebugTree {
      * @param priority The priority, which should be logged
      * @return True, if we should log
      */
-    private boolean shouldLog(int priority) {
+    public boolean shouldLog(int priority) {
         if (!priorityFilterSet.isEmpty()) {
             for (final int priorityFilter : priorityFilterSet) {
                 // if our priority is filtered, get out of here
