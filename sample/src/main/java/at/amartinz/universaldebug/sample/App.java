@@ -36,6 +36,7 @@ import at.amartinz.universaldebug.fabric.trees.CrashlyticsComponent;
 import at.amartinz.universaldebug.trees.BaseTree;
 import at.amartinz.universaldebug.trees.LogComponent;
 import at.amartinz.universaldebug.trees.VibrationComponent;
+import at.amartinz.universaldebug.trees.WriterComponent;
 
 /**
  * Created by amartinz on 18.04.16.
@@ -84,6 +85,13 @@ public class App extends Application {
                     Arrays.asList(Log.ASSERT, Log.DEBUG, Log.INFO, Log.VERBOSE, Log.WARN));
             vibrationComponent.setPriorityFilterSet(vibrationFilter);
             baseTree.addComponent(vibrationComponent);
+
+            final WriterComponent writerComponent = new WriterComponent(baseTree, getExternalCacheDir());
+            // only vibrate on error and warning logs
+            final HashSet<Integer> writerFilter = new HashSet<>(
+                    Arrays.asList(Log.ASSERT, Log.DEBUG, Log.INFO, Log.VERBOSE, Log.WARN));
+            writerComponent.setPriorityFilterSet(writerFilter);
+            baseTree.addComponent(writerComponent);
         }
 
         final CrashlyticsComponent crashlyticsComponent = new CrashlyticsComponent(baseTree);
