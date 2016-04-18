@@ -19,5 +19,8 @@ android {
 }
 
 dependencies {
-    // empty
+    compile 'com.android.support:support-annotations:23.3.0'
+
+    // see https://github.com/JakeWharton/timber
+    compile 'com.jakewharton.timber:timber:4.1.1'
 }

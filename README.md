@@ -1,5 +1,10 @@
 # UniversalDebug
 
+TODO: write a readme
+
+## Libraries used
+- [Timber](https://github.com/JakeWharton/timber)
+
 ## License
     The MIT License
 
