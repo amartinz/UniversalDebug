@@ -22,19 +22,43 @@
  * THE SOFTWARE.
  */
 
-package at.amartinz.universaldebug.trees;
+package at.amartinz.universaldebug.fabric;
 
-import android.support.annotation.NonNull;
+import android.Manifest;
+import android.content.Context;
+import android.support.annotation.RequiresPermission;
+
+import com.crashlytics.android.Crashlytics;
+
+import java.util.HashSet;
+
+import io.fabric.sdk.android.Fabric;
+import io.fabric.sdk.android.Kit;
 
 /**
- * A {@link BaseTreeComponent} used for plain logging
+ * Created by amartinz on 18.04.16.
  */
-public class LogComponent extends BaseTreeComponent {
-    public LogComponent(@NonNull BaseTree baseTree) {
-        super(baseTree);
+public class FabricConfig {
+    private final Context applicationContext;
+
+    public final HashSet<Kit> kitHashSet;
+
+    @RequiresPermission(Manifest.permission.INTERNET)
+    public FabricConfig(Context applicationContext) {
+        this.applicationContext = applicationContext;
+        this.kitHashSet = new HashSet<>();
     }
 
-    @Override protected void doLog(int priority, String tag, String message, Throwable t) {
-        baseTree.reallyDoLog(priority, tag, message, t);
+    public FabricConfig withCrashlytics() {
+        kitHashSet.add(new Crashlytics());
+        return this;
+    }
+
+    public Kit[] getKits() {
+        return kitHashSet.toArray(new Kit[kitHashSet.size()]);
+    }
+
+    public Fabric install() {
+        return Fabric.with(applicationContext, getKits());
     }
 }

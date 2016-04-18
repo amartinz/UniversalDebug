@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 
+import at.amartinz.universaldebug.trees.CrashComponent;
 import timber.log.Timber;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final Runnable errorLogRunnable = new Runnable() {
         @Override public void run() {
-            Timber.e("Any error occurred, i guess...");
+            Timber.e("%sAny error occurred, i guess...", CrashComponent.DEFAULT_PREFIX_CRASH);
         }
     };
 }

@@ -36,7 +36,7 @@ import android.support.annotation.RequiresPermission;
  * <br>
  * <a href="https://youtu.be/otCpCn0l4Wo?t=14s">https://youtu.be/otCpCn0l4Wo?t=14s</a>
  */
-public final class VibrationComponent extends BaseTreeComponent {
+public class VibrationComponent extends BaseTreeComponent {
     public static final long DEFAULT_DURATION = 75;
 
     private final Vibrator vibrator;

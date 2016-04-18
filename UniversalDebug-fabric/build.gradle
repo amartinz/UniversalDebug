@@ -22,19 +22,41 @@
  * THE SOFTWARE.
  */
 
-package at.amartinz.universaldebug.trees;
+apply plugin: 'com.android.library'
+// add to master project
+//apply plugin: 'io.fabric'
 
-import android.support.annotation.NonNull;
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.2"
 
-/**
- * A {@link BaseTreeComponent} used for plain logging
- */
-public class LogComponent extends BaseTreeComponent {
-    public LogComponent(@NonNull BaseTree baseTree) {
-        super(baseTree);
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+
+        if (project.hasProperty("api_key_fabric")) {
+            manifestPlaceholders = [apiKeyFabric: api_key_fabric]
+        } else {
+            logger.quiet("Please add your API KEY for fabric to gradle.properties:")
+            logger.quiet("api_key_fabric=YOUR_API_KEY")
+        }
     }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
 
-    @Override protected void doLog(int priority, String tag, String message, Throwable t) {
-        baseTree.reallyDoLog(priority, tag, message, t);
+dependencies {
+    compile project(':UniversalDebug-core')
+
+    // fabric
+    // see https://fabric.io/kits/android/crashlytics
+    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
+        transitive = true;
     }
 }

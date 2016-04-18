@@ -30,6 +30,8 @@ import android.util.Log;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import at.amartinz.universaldebug.fabric.FabricConfig;
+import at.amartinz.universaldebug.fabric.trees.CrashlyticsComponent;
 import at.amartinz.universaldebug.trees.BaseTree;
 import at.amartinz.universaldebug.trees.LogComponent;
 import at.amartinz.universaldebug.trees.VibrationComponent;
@@ -41,6 +43,11 @@ import timber.log.Timber;
 public class App extends Application {
     @Override public void onCreate() {
         super.onCreate();
+
+        // TODO: integrate into debug core
+        new FabricConfig(this)
+                .withCrashlytics()
+                .install();
 
         final HashSet<Integer> priorityFilter = new HashSet<>();
         // if we are in release mode, remove all log calls except ERROR and WARN
@@ -58,6 +65,9 @@ public class App extends Application {
                 Arrays.asList(Log.ASSERT, Log.DEBUG, Log.INFO, Log.VERBOSE, Log.WARN));
         vibrationComponent.setPriorityFilterSet(vibrationFilter);
         baseTree.addComponent(vibrationComponent);
+
+        final CrashlyticsComponent crashlyticsComponent = new CrashlyticsComponent(baseTree);
+        baseTree.addComponent(crashlyticsComponent);
 
         // plant a tree, to make mother earth happy
         Timber.plant(baseTree);

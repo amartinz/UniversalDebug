@@ -22,19 +22,30 @@
  * THE SOFTWARE.
  */
 
-package at.amartinz.universaldebug.trees;
+package at.amartinz.universaldebug.fabric.trees;
 
 import android.support.annotation.NonNull;
 
+import com.crashlytics.android.Crashlytics;
+
+import at.amartinz.universaldebug.trees.BaseTree;
+import at.amartinz.universaldebug.trees.CrashComponent;
+
 /**
- * A {@link BaseTreeComponent} used for plain logging
+ * Log with {@link timber.log.Timber#e(Throwable, String, Object...)} with the specified crashPrefix
+ * to send a non fatal exception log to Crashlytics.
  */
-public class LogComponent extends BaseTreeComponent {
-    public LogComponent(@NonNull BaseTree baseTree) {
+public class CrashlyticsComponent extends CrashComponent {
+    public CrashlyticsComponent(@NonNull BaseTree baseTree) {
         super(baseTree);
     }
 
-    @Override protected void doLog(int priority, String tag, String message, Throwable t) {
-        baseTree.reallyDoLog(priority, tag, message, t);
+    public CrashlyticsComponent(@NonNull BaseTree baseTree, @NonNull String crashPrefix) {
+        super(baseTree, crashPrefix);
+    }
+
+    @Override protected void reportCrash(int priority, String tag, String message, Throwable t) {
+        final String errorString = String.format("%s: %s", tag, message);
+        Crashlytics.logException(new RuntimeException(errorString));
     }
 }
