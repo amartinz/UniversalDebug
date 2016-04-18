@@ -22,45 +22,27 @@
  * THE SOFTWARE.
  */
 
-apply plugin: 'com.android.library'
-// add to master project
-//apply plugin: 'io.fabric'
+package at.amartinz.universaldebug.analytics;
 
-android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
-    defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
+import java.util.Map;
 
-        if (project.hasProperty("api_key_fabric")) {
-            manifestPlaceholders = [apiKeyFabric: api_key_fabric]
-        } else {
-            logger.quiet("Please add your API KEY for fabric to gradle.properties:")
-            logger.quiet("api_key_fabric=YOUR_API_KEY")
-        }
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-}
+/**
+ * An abstract implementation of an Analytics service, like <a href="https://fabric.io/kits/android/answers">Answers from Fabric</a>
+ */
+public abstract class AnalyticsComponent {
+    /**
+     * Logs a custom event to the analytics service.
+     *
+     * @param eventName  The name of the event
+     * @param attributes An optional key/value map of attributes, like "username" - "amartinz"
+     */
+    public abstract void logCustom(@NonNull String eventName, @Nullable Map<Object, Object> attributes);
 
-dependencies {
-    compile project(':UniversalDebug-core')
+    public abstract void logAppOpened();
 
-    // fabric
-    // see https://fabric.io/kits/android/answers
-    compile('com.crashlytics.sdk.android:answers:1.3.6@aar') {
-        transitive = true;
-    }
-    // see https://fabric.io/kits/android/crashlytics
-    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
-        transitive = true;
-    }
+    public abstract void logClickGeneric(@NonNull String name);
+    public abstract void logClickButton(@NonNull String name);
 }

@@ -29,9 +29,12 @@ import android.content.Context;
 import android.support.annotation.RequiresPermission;
 
 import com.crashlytics.android.Crashlytics;
+import com.crashlytics.android.answers.Answers;
 
 import java.util.HashSet;
 
+import at.amartinz.universaldebug.analytics.Analytics;
+import at.amartinz.universaldebug.fabric.trees.AnswerComponent;
 import io.fabric.sdk.android.Fabric;
 import io.fabric.sdk.android.Kit;
 
@@ -47,6 +50,12 @@ public class FabricConfig {
     public FabricConfig(Context applicationContext) {
         this.applicationContext = applicationContext;
         this.kitHashSet = new HashSet<>();
+    }
+
+    public FabricConfig withAnswers() {
+        kitHashSet.add(new Answers());
+        Analytics.get().addComponent(new AnswerComponent());
+        return this;
     }
 
     public FabricConfig withCrashlytics() {

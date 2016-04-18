@@ -46,6 +46,7 @@ public class App extends Application {
 
         // TODO: integrate into debug core
         new FabricConfig(this)
+                .withAnswers()
                 .withCrashlytics()
                 .install();
 

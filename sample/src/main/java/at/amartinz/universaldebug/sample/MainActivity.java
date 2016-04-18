@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 
+import at.amartinz.universaldebug.analytics.Analytics;
 import at.amartinz.universaldebug.trees.CrashComponent;
 import timber.log.Timber;
 
@@ -21,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
     @Override protected void onResume() {
         super.onResume();
         HANDLER.postDelayed(errorLogRunnable, 2500);
+
+        Analytics.get().logAppOpened();
     }
 
     private static final Runnable errorLogRunnable = new Runnable() {
