@@ -34,7 +34,7 @@ public final class LogComponent extends BaseTreeComponent {
         super(baseTree);
     }
 
-    @Override protected void log(int priority, String tag, String message, Throwable t) {
+    @Override protected void doLog(int priority, String tag, String message, Throwable t) {
         baseTree.reallyDoLog(priority, tag, message, t);
     }
 }

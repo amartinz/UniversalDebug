@@ -113,10 +113,6 @@ public class BaseTree extends Timber.DebugTree {
      * @see timber.log.Timber.Tree#log(int, String, String, Throwable)
      */
     @Override protected void log(int priority, String tag, String message, Throwable t) {
-        if (!shouldLog(priority)) {
-            return;
-        }
-
         for (final BaseTreeComponent baseTreeComponent : baseTreeComponents) {
             baseTreeComponent.log(priority, tag, message, t);
         }

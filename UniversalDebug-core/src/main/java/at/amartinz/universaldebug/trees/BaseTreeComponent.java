@@ -25,12 +25,17 @@
 package at.amartinz.universaldebug.trees;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
+import java.util.HashSet;
 
 /**
  * A TreeComponent can be attached and removed to the tree at runtime.
  */
 public abstract class BaseTreeComponent {
     protected BaseTree baseTree;
+
+    protected HashSet<Integer> priorityFilterSet;
 
     public BaseTreeComponent(@NonNull BaseTree baseTree) {
         this.baseTree = baseTree;
@@ -41,5 +46,38 @@ public abstract class BaseTreeComponent {
      *
      * @see timber.log.Timber.Tree#log(int, String, String, Throwable)
      */
-    protected abstract void log(int priority, String tag, String message, Throwable t);
+    protected abstract void doLog(int priority, String tag, String message, Throwable t);
+
+    protected void log(int priority, String tag, String message, Throwable t) {
+        if (shouldLog(priority)) {
+            doLog(priority, tag, message, t);
+        }
+    }
+
+    /**
+     * If a priority filter set is set, it will be used to decide whether {@link #doLog(int, String, String, Throwable)} gets
+     * called.<br>
+     * If no filter is set, it will call {@link BaseTree#shouldLog(int)}.
+     *
+     * @see BaseTree#shouldLog(int)
+     */
+    protected boolean shouldLog(int priority) {
+        if (priorityFilterSet == null) {
+            return baseTree.shouldLog(priority);
+        }
+
+        if (!priorityFilterSet.isEmpty()) {
+            for (final int priorityFilter : priorityFilterSet) {
+                // if our priority is filtered, get out of here
+                if (priority == priorityFilter) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public void setPriorityFilterSet(@Nullable HashSet<Integer> priorityFilterSet) {
+        this.priorityFilterSet = priorityFilterSet;
+    }
 }

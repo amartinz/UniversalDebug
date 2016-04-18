@@ -70,7 +70,7 @@ public final class VibrationComponent extends BaseTreeComponent {
         }
     }
 
-    @Override protected void log(int priority, String tag, String message, Throwable t) {
+    @Override protected void doLog(int priority, String tag, String message, Throwable t) {
         if (vibrator != null) {
             vibrator.cancel();
             vibrator.vibrate(duration);
