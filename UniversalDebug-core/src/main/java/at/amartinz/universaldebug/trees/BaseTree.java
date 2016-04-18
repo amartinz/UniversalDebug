@@ -46,6 +46,8 @@ public class BaseTree extends Timber.DebugTree {
 
     private final List<BaseTreeComponent> baseTreeComponents;
 
+    private boolean isEnabled;
+
     /**
      * Creates a {@link BaseTree} to be used with {@link Timber.Tree#plant(Timber.Tree) }.
      *
@@ -57,6 +59,20 @@ public class BaseTree extends Timber.DebugTree {
         this.priorityFilterSet = new HashSet<>(priorityFilterList);
 
         this.baseTreeComponents = new ArrayList<>();
+
+        this.isEnabled = true;
+    }
+
+    /**
+     * When disabled, no events will get forwarded.<br>
+     * This can be used to prevent the overhead of {@link #shouldLog(int)} calls.
+     *
+     * @param isEnabled Whether we should forward events or not
+     * @return The same {@link BaseTree} instance to allow chained calls
+     */
+    public BaseTree setEnabled(boolean isEnabled) {
+        this.isEnabled = isEnabled;
+        return this;
     }
 
     @NonNull public Context getApplicationContext() {
@@ -74,7 +90,7 @@ public class BaseTree extends Timber.DebugTree {
      * Adds a {@link BaseTreeComponent} which will receive events and be able to react with custom logic.
      *
      * @param baseTreeComponent The {@link BaseTreeComponent} to add
-     * @return The same {@link BaseTree} instance allow chained calls
+     * @return The same {@link BaseTree} instance to allow chained calls
      */
     public BaseTree addComponent(BaseTreeComponent baseTreeComponent) {
         baseTreeComponents.add(baseTreeComponent);
@@ -85,7 +101,7 @@ public class BaseTree extends Timber.DebugTree {
      * Removes a {@link BaseTreeComponent} which then will not receive any events anymore.
      *
      * @param baseTreeComponent The {@link BaseTreeComponent} to remove
-     * @return The same {@link BaseTree} instance allow chained calls
+     * @return The same {@link BaseTree} instance to allow chained calls
      */
     public BaseTree removeComponent(BaseTreeComponent baseTreeComponent) {
         baseTreeComponents.remove(baseTreeComponent);
@@ -113,6 +129,11 @@ public class BaseTree extends Timber.DebugTree {
      * @see timber.log.Timber.Tree#log(int, String, String, Throwable)
      */
     @Override protected void log(int priority, String tag, String message, Throwable t) {
+        // when we are not enabled, do not emit any events
+        if (!isEnabled) {
+            return;
+        }
+
         for (final BaseTreeComponent baseTreeComponent : baseTreeComponents) {
             baseTreeComponent.log(priority, tag, message, t);
         }
