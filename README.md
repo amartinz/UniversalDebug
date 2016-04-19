@@ -1,9 +1,24 @@
 # UniversalDebug
 
+[ ![Download](https://api.bintray.com/packages/evisceration/maven/universal-debug/images/download.svg) ](https://bintray.com/evisceration/maven/universal-debug/_latestVersion)
+
 TODO: write a readme
+
+## UniversalDebug Fabric
+
+[ ![Download](https://api.bintray.com/packages/evisceration/maven/universal-debug-fabric/images/download.svg) ](https://bintray.com/evisceration/maven/universal-debug-fabric/_latestVersion)
+
+TODO: write a readme about the fabric version
 
 ## Libraries used
 - [Timber](https://github.com/JakeWharton/timber)
+
+## Download
+    compile 'at.amartinz:universal-debug:1.0.0'
+
+If you want the Fabric version
+
+    compile 'at.amartinz:universal-debug-fabric:1.0.0'
 
 ## License
     The MIT License

@@ -24,3 +24,7 @@ dependencies {
     // see https://github.com/JakeWharton/timber
     compile 'com.jakewharton.timber:timber:4.1.1'
 }
+
+if (project.hasProperty('bintray_user') && project.hasProperty('bintray_api_key')) {
+    apply from: 'bintray.gradle'
+}

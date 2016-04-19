@@ -1,4 +1,4 @@
-include ':UniversalDebug-core'
-include ':UniversalDebug-fabric'
+include ':universal-debug'
+include ':universal-debug-fabric'
 
 include ':sample'

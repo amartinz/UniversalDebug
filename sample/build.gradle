@@ -47,6 +47,6 @@ android {
 dependencies {
     compile 'com.android.support:appcompat-v7:23.3.0'
 
-    compile project(':UniversalDebug-core')
-    compile project(':UniversalDebug-fabric')
+    compile project(':universal-debug')
+    compile project(':universal-debug-fabric')
 }
