@@ -1,4 +1,4 @@
-include ':universal-debug'
+include ':universal-debug', ':universal-debug-firebase'
 include ':universal-debug-fabric'
 
 include ':sample'

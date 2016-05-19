@@ -33,6 +33,8 @@ import java.util.HashSet;
 import at.amartinz.universaldebug.UniversalDebug;
 import at.amartinz.universaldebug.fabric.FabricConfig;
 import at.amartinz.universaldebug.fabric.trees.CrashlyticsComponent;
+import at.amartinz.universaldebug.firebase.FirebaseConfig;
+import at.amartinz.universaldebug.firebase.trees.FirebaseCrashComponent;
 import at.amartinz.universaldebug.trees.BaseTree;
 import at.amartinz.universaldebug.trees.LogComponent;
 import at.amartinz.universaldebug.trees.VibrationComponent;
@@ -55,6 +57,11 @@ public class App extends Application {
                 .withAnswers()
                 .withCrashlytics();
         universalDebug.withExtension(fabricConfig);
+
+        final FirebaseConfig firebaseConfig = new FirebaseConfig(universalDebug)
+                .withAnalytics()
+                .withCrashReporting();
+        universalDebug.withExtension(firebaseConfig);
 
         universalDebug.install();
     }
@@ -96,6 +103,9 @@ public class App extends Application {
 
         final CrashlyticsComponent crashlyticsComponent = new CrashlyticsComponent(baseTree);
         baseTree.addComponent(crashlyticsComponent);
+
+        final FirebaseCrashComponent firebaseCrashComponent = new FirebaseCrashComponent(baseTree);
+        baseTree.addComponent(firebaseCrashComponent);
 
         return baseTree;
     }

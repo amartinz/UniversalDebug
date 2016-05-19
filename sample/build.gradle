@@ -3,21 +3,20 @@ apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    buildToolsVersion "23.0.3"
 
     signingConfigs {
         release {
-            if (project.hasProperty("signing_prop_file")) {
-                logger.quiet('Signing the build!')
-                def Properties keyProps = new Properties()
-                keyProps.load(new FileInputStream(file(signing_prop_file)))
-                storeFile file(keyProps["store"])
-                storePassword keyProps["storePass"]
-                keyAlias keyProps["alias"]
-                keyPassword keyProps["pass"]
-            } else {
+            def store = project.findProperty("sign_store") ?: "debug.keystore"
+            storeFile file(store)
+
+            if ("debug.keystore".equals(store)) {
                 logger.quiet('Not signing the build!')
-                storeFile file("debug.keystore")
+            } else {
+                logger.quiet('Signing the build!')
+                storePassword project.property("sign_store_pass")
+                keyAlias project.property("sign_key_alias")
+                keyPassword project.property("sign_key_pass")
             }
         }
     }
@@ -45,8 +44,12 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:23.3.0'
+    compile 'com.android.support:appcompat-v7:23.4.0'
 
     compile project(':universal-debug')
     compile project(':universal-debug-fabric')
+    compile project(':universal-debug-firebase')
 }
+
+// firebase
+apply plugin: 'com.google.gms.google-services'

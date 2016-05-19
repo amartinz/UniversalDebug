@@ -10,6 +10,12 @@ TODO: write a readme
 
 TODO: write a readme about the fabric version
 
+## UniversalDebug Firebase
+
+[ ![Download](https://api.bintray.com/packages/evisceration/maven/universal-debug-firebase/images/download.svg) ](https://bintray.com/evisceration/maven/universal-debug-firebase/_latestVersion)
+
+TODO: write a readme about the firebase version
+
 ## Libraries used
 - [Timber](https://github.com/JakeWharton/timber)
 
@@ -19,6 +25,10 @@ TODO: write a readme about the fabric version
 If you want the Fabric version
 
     compile 'at.amartinz:universal-debug-fabric:1.0.0'
+
+If you want the Firebase version
+
+    compile 'at.amartinz:universal-debug-firebase:1.0.0'
 
 ## License
     The MIT License
